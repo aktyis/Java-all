@@ -1,309 +1,182 @@
-import java.util.PriorityQueue;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
-import java.util.Comparator;
-import java.util.ArrayList;
-import java.util.Collections;
-
-public class IDS
-{
-	//h scores is the stright-line distance from the current city to Bucharest
-        public static void main(String[] args)
-	{
-
-                //initialize the graph base on the Romania map
-                Node n1 = new Node("Arad",366);
-                
-		Node n2 = new Node("Zerind",374);
-                Node n3 = new Node("Oradea",380);
-                
-		Node n4 = new Node("Sibiu",253);
-                Node n5 = new Node("Fagaras",178);
-                
-		Node n6 = new Node("Rimnicu Vilcea",193);
-                Node n7 = new Node("Pitesti",98);
-                
-		Node n8 = new Node("Timisoara",329);
-                Node n9 = new Node("Lugoj",244);
-                
-		Node n10 = new Node("Mehadia",241);
-                Node n11 = new Node("Drobeta",242);
-                
-		Node n12 = new Node("Craiova",160);
-                Node n13 = new Node("Bucharest",0);
-		
-		Node n14 = new Node("Giurgiu",77);
-		Node n15 = new Node("Urziceni",80);
-		
-		Node n16 = new Node("Hirsova",151);
-		Node n17 = new Node("Eforie",161);
-		
-		Node n18 = new Node("Valsui",199);
-		Node n19 = new Node("Iasi",226);
-		Node n20 = new Node("Neamt",234);
- 
-                //initialize the edges
-
-                //Arad
-                n1.adjacencies = new Edge[]
-		{      new Edge(n2,75),
-                        new Edge(n4,140),
-                        new Edge(n8,118)
-                };
-                 
-                 //Zerind
-                n2.adjacencies = new Edge[]
-		{
-                        new Edge(n1,75),
-                        new Edge(n3,71)
-                };
-
-                 //Oradea
-                n3.adjacencies = new Edge[]
-		{
-                        new Edge(n2,71),
-                        new Edge(n4,151)
-                };
-                 
-                 //Sibiu
-                n4.adjacencies = new Edge[]
-		{
-                        new Edge(n1,140),
-                        new Edge(n5,99),
-                        new Edge(n3,151),
-                        new Edge(n6,80),
-                };
-                 
-                 //Fagaras
-                n5.adjacencies = new Edge[]
-		{
-                        new Edge(n4,99),
-
-                        //178
-                        new Edge(n13,211)
-                };
-                 
-                 //Rimnicu Vilcea
-                n6.adjacencies = new Edge[]
-		{
-                        new Edge(n4,80),
-                        new Edge(n7,97),
-                        new Edge(n12,146)
-                };
-                 
-                 //Pitesti
-                n7.adjacencies = new Edge[]
-		{
-                        new Edge(n6,97),
-                        new Edge(n13,101),
-                        new Edge(n12,138)
-                };
-                 
-                 //Timisoara
-                n8.adjacencies = new Edge[]
-		{
-                        new Edge(n1,118),
-                        new Edge(n9,111)
-                };
-                 
-                 //Lugoj
-                n9.adjacencies = new Edge[]
-		{
-                        new Edge(n8,111),
-                        new Edge(n10,70)
-                };
-
-                 //Mehadia
-                n10.adjacencies = new Edge[]
-		{
-                        new Edge(n9,70),
-                        new Edge(n11,75)
-                };
-                 
-                 //Drobeta
-                n11.adjacencies = new Edge[]
-		{
-                        new Edge(n10,75),
-                        new Edge(n12,120)
-                };
-
-                 //Craiova
-                n12.adjacencies = new Edge[]
-		{
-                        new Edge(n11,120),
-                        new Edge(n6,146),
-                        new Edge(n7,138)
-                };
-
-                //Bucharest
-                n13.adjacencies = new Edge[]
-		{
-                        new Edge(n7,101),
-                        new Edge(n14,90),
-                        new Edge(n5,211),
-			new Edge(n15,85),
-                };
-                 
-                 //Giurgiu
-                n14.adjacencies = new Edge[]
-		{
-                        new Edge(n13,90)
-                };
-		
-		//Urziceni
-		n15.adjacencies = new Edge[]
-		{
-                        new Edge(n13,85),
-                        new Edge(n16,98),
-                        new Edge(n18,142)
-                };
-		
-		//Hirsova
-		n16.adjacencies = new Edge[]
-		{
-                        new Edge(n15,98),
-                        new Edge(n17,86)
-                };
-		
-		//Eforie
-		n17.adjacencies = new Edge[]
-		{
-                        new Edge(n16,86)
-                };
-		
-		//Valsui
-		n18.adjacencies = new Edge[]
-		{
-                        new Edge(n15,142),
-                        new Edge(n19,92)
-                };
-		//Iasi
-		n19.adjacencies = new Edge[]
-		{
-                        new Edge(n18,92),
-                        new Edge(n20,87)
-                };
-		//Neamt
-		n20.adjacencies = new Edge[]
-		{
-                        new Edge(n19,87)
-                };
-
-                AstarSearch(n14,n13);
-
-                List<Node> path = printPath(n13);
-
-                        System.out.println("Path: " + path);
-			System.out.println("Cost  " + (int) n13.f_scores );
-        }
-	
-
-
-        public static List<Node> printPath(Node target)
-	{
-                List<Node> path = new ArrayList<Node>();
-        
-		for(Node node = target; node!=null; node = node.parent)
-		{
-		    path.add(node);
-		}
-
-		Collections.reverse(path);
-
-		return path;
-        }
-
-        public static void AstarSearch(Node source, Node goal)
-	{
-
-                Set<Node> explored = new HashSet<Node>();
-
-                PriorityQueue<Node> queue = new PriorityQueue<Node>
-		(
-			20, new Comparator<Node>()
-			{
-				//override compare method
-				 public int compare(Node i, Node j)
-				{
-					if(i.f_scores > j.f_scores)
-					{
-						return 1;
-					}
-
-					else if (i.f_scores < j.f_scores)
-					{
-						return -1;
-					}
-
-					else
-					{
-						return 0;
-					}
-				 }
-
-			}
-		);
-
-                //cost from start
-                source.g_scores = 0;
-                queue.add(source);
-
-                boolean found = false;
-
-                while( ( !queue.isEmpty() ) && ( !found ) )
-		{
-
-                        //the node in having the lowest f_score value
-                        Node current = queue.poll();
-
-                        explored.add(current);
-
-                        //goal found
-                        if(current.value.equals(goal.value))
-			{
-                                found = true;
-                        }
-
-                        //check every child of current node
-                        for(Edge e : current.adjacencies)
-			{
-                                Node child = e.target;
-                                double cost = e.cost;
-                                double temp_g_scores = current.g_scores + cost;
-                                double temp_f_scores = temp_g_scores + child.h_scores;
-
-
-                                /*if child node has been evaluated and the newer f_score is higher, skip*/
-                                
-                                if((explored.contains(child)) && (temp_f_scores >= child.f_scores))
-				{
-                                        continue;
-                                }
-
-                                /*else if child node is not in queue or  newer f_score is lower*/
-                                
-                                else if((!queue.contains(child)) ||  (temp_f_scores < child.f_scores))
-				{
-					child.parent = current;
-                                        child.g_scores = temp_g_scores;
-                                        child.f_scores = temp_f_scores;
-
-                                        if(queue.contains(child))
-					{
-                                                queue.remove(child);
-                                        }
-
-                                        queue.add(child);
-
-                                }
-
-                        }
-
-                }
-
-        }
-        
-}
-
-
+//import java.util.PriorityQueue;
+//import java.util.HashSet;
+//import java.util.Set;
+//import java.util.List;
+//import java.util.Comparator;
+//import java.util.ArrayList;
+//import java.util.Collections;
+//import java.util.Scanner;
+//
+//public class IDS
+//{
+//    private int depth;
+//    private int maxDepth;
+//        public static void main(String[] args)
+//	{
+//                Node a = new Node("A",0);
+//                Node b = new Node("B",0);
+//                Node c = new Node("C",0);
+//                Node d = new Node("D",0);
+//                Node e = new Node("E",0);
+//                Node f = new Node("F",0);
+//                Node g = new Node("G",0);
+//                Node h = new Node("H",0);
+//                Node i = new Node("I",0);
+//                Node j = new Node("J",0);
+//                Node k = new Node("K",0);
+//                Node l = new Node("L",0);
+//                Node m = new Node("M",0);
+//                Node n = new Node("N",0);
+//                
+//		a.adjacencies = new Edge[]
+//		{
+//                    new Edge(b,0),
+//                    new Edge(c,0)
+//                };
+//                b.adjacencies = new Edge[]
+//		{
+//                    new Edge(d,0),
+//                    new Edge(e,0)
+//                };
+//                c.adjacencies = new Edge[]
+//		{
+//                    new Edge(f,0),
+//                    new Edge(g,0)
+//                };
+//                d.adjacencies = new Edge[]
+//		{
+//                    new Edge(h,0),
+//                    new Edge(i,0)
+//                };
+//                e.adjacencies = new Edge[]
+//		{
+//                    new Edge(j,0),
+//                    new Edge(k,0)
+//                };
+//                f.adjacencies = new Edge[]
+//		{
+//                    new Edge(f,0),
+//                    new Edge(g,0)
+//                };
+//                g.adjacencies = new Edge[]
+//		{
+//                    new Edge(h,0),
+//                    new Edge(i,0)
+//                };
+//                h.adjacencies = new Edge[]
+//		{
+//                    new Edge(j,0),
+//                    new Edge(k,0)
+//                };
+//                i.adjacencies = new Edge[]
+//		{
+//                    new Edge(f,0),
+//                    new Edge(g,0)
+//                };
+//                j.adjacencies = new Edge[]
+//		{
+//                    new Edge(h,0),
+//                    new Edge(i,0)
+//                };
+//                k.adjacencies = new Edge[]
+//		{
+//                    new Edge(j,0),
+//                    new Edge(k,0)
+//                };
+//                l.adjacencies = new Edge[]
+//		{
+//                    
+//                };
+//                m.adjacencies = new Edge[]
+//		{
+//                   
+//                };
+//                n.adjacencies = new Edge[]
+//		{
+//                   
+//                };
+////                String source,goal;
+////                Scanner scanner = null;
+////                System.out.println("Enter the source for the graph");
+////                source = scanner.nextLine(); 
+////                System.out.println("Enter the Node to Search the graph");
+////                goal = scanner.nextLine(); 
+//                
+//                iterativeDeepningSearch(a,j);
+//
+//        }
+//        public static void iterativeDeepningSearch(Node source, Node goal)
+//	{
+//        
+//        }
+//        
+//	
+//
+//        public static void depthLimitedSearch(Node source, Node goal)
+//	{
+//            
+//            Set<Node> explored = new HashSet<Node>();
+//            explored.add(source);
+//
+//            //goal found
+//            if(source.value.equals(goal.value))
+//            {
+//                    //found = true;
+//            }
+//            
+//            
+//
+//                //cost from start
+//                source.g_scores = 0;
+//                queue.add(source);
+//
+//                boolean found = false;
+//
+//                while( ( !queue.isEmpty() ) && ( !found ) )
+//		{
+//
+//                        //the node in having the lowest f_score value
+//                       
+//
+//                        //check every child of current node
+//                        for(Edge e : current.adjacencies)
+//			{
+//                                Node child = e.target;
+//                                double cost = e.cost;
+//                                double temp_g_scores = current.g_scores + cost;
+//                                double temp_f_scores = temp_g_scores + child.h_scores;
+//
+//
+//                                /*if child node has been evaluated and the newer f_score is higher, skip*/
+//                                
+//                                if((explored.contains(child)) && (temp_f_scores >= child.f_scores))
+//				{
+//                                        continue;
+//                                }
+//
+//                                /*else if child node is not in queue or  newer f_score is lower*/
+//                                
+//                                else if((!queue.contains(child)) ||  (temp_f_scores < child.f_scores))
+//				{
+//					child.parent = current;
+//                                        child.g_scores = temp_g_scores;
+//                                        child.f_scores = temp_f_scores;
+//
+//                                        if(queue.contains(child))
+//					{
+//                                                queue.remove(child);
+//                                        }
+//
+//                                        queue.add(child);
+//
+//                                }
+//
+//                        }
+//
+//                }
+//
+//        }
+//        
+//}
+//
+//

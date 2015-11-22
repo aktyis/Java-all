@@ -115,8 +115,7 @@ public class UCS
             System.out.println( " "+Arrays.toString(Explored.toArray()));
             
             if(current.value.equals(goal.value))
-            {
-		    
+            {		    
                 found = true;
                 //System.out.println("Node Found  :"+current.value + "  Cost : "+current.f_scores);
                 break;
