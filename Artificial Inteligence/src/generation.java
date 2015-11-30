@@ -1,14 +1,13 @@
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
 public class generation 
 {
-    private pop pop1 ;
-    private pop pop2 ;
-    private pop pop3 ;
-    private pop pop4 ;
+    private Chromosome chromosome1 ;
+    private Chromosome chromosome2 ;
+    private Chromosome chromosome3 ;
+    private Chromosome chromosome4 ;
     
     private int sumOfFunction;
     private int avgOfFunction;
@@ -16,36 +15,36 @@ public class generation
     
     public generation(String[] one1,String[] one2,String[] one3,String[] one4)
     {
-        this.pop1 = new pop(one1);
-        this.pop2 = new pop(one2);
-        this.pop3 = new pop(one3);
-        this.pop4 = new pop(one4);
+        this.chromosome1 = new Chromosome(one1);
+        this.chromosome2 = new Chromosome(one2);
+        this.chromosome3 = new Chromosome(one3);
+        this.chromosome4 = new Chromosome(one4);
         
-        this.sumOfFunction = pop1.getFunction() + pop2.getFunction() + pop3.getFunction()+ pop4.getFunction();
+        this.sumOfFunction = chromosome1.getFunction() + chromosome2.getFunction() + chromosome3.getFunction()+ chromosome4.getFunction();
         this.avgOfFunction = this.sumOfFunction/4;
-        this.maxOfFunction = pop1.getFunction();
+        this.maxOfFunction = chromosome1.getFunction();
         
-        if( this.maxOfFunction < pop2.getFunction())
+        if( this.maxOfFunction < chromosome2.getFunction())
         {
-            this.maxOfFunction = pop2.getFunction();
+            this.maxOfFunction = chromosome2.getFunction();
         }
-        else if(this.maxOfFunction < pop3.getFunction())
+        else if(this.maxOfFunction < chromosome3.getFunction())
         {
-            this.maxOfFunction = pop2.getFunction();
+            this.maxOfFunction = chromosome2.getFunction();
         }
-        else if(this.maxOfFunction < pop4.getFunction())
+        else if(this.maxOfFunction < chromosome4.getFunction())
         {
-            this.maxOfFunction = pop4.getFunction();
+            this.maxOfFunction = chromosome4.getFunction();
         }        
     }
     
     public void calculate()
     {
-        this.sumOfFunction = pop1.getFunction() + pop2.getFunction() + pop3.getFunction()+ pop4.getFunction();
+        this.sumOfFunction = chromosome1.getFunction() + chromosome2.getFunction() + chromosome3.getFunction()+ chromosome4.getFunction();
         this.avgOfFunction = this.sumOfFunction/4;
        
         
-        int[] maxArray = {pop1.getFunction(), pop2.getFunction(),pop3.getFunction(),pop4.getFunction()};
+        int[] maxArray = {chromosome1.getFunction(), chromosome2.getFunction(),chromosome3.getFunction(),chromosome4.getFunction()};
         Arrays.sort(maxArray);
         
         this.maxOfFunction = maxArray[3];
@@ -60,30 +59,30 @@ public class generation
          
         if (randomNum <= 100)
         {
-            this.swap(pop1.getPopulation(),pop2.getPopulation());
-            this.swap(pop3.getPopulation(),pop4.getPopulation());
+            this.cross(chromosome1.getPopulation(),chromosome2.getPopulation());
+            this.cross(chromosome3.getPopulation(),chromosome4.getPopulation());
         }
         else
         {
             if (randomNum <= 200)
             {
-                this.swap(pop1.getPopulation(),pop3.getPopulation());
-                this.swap(pop2.getPopulation(),pop4.getPopulation());
+                this.cross(chromosome1.getPopulation(),chromosome3.getPopulation());
+                this.cross(chromosome2.getPopulation(),chromosome4.getPopulation());
             }
             else 
             {                
-                this.swap(pop1.getPopulation(),pop4.getPopulation());
-                this.swap(pop2.getPopulation(),pop3.getPopulation());   
+                this.cross(chromosome1.getPopulation(),chromosome4.getPopulation());
+                this.cross(chromosome2.getPopulation(),chromosome3.getPopulation());   
             }
         }
       
-        this.pop1.calculate();
-        this.pop2.calculate();
-        this.pop3.calculate();
-        this.pop4.calculate();
+        this.chromosome1.calculate();
+        this.chromosome2.calculate();
+        this.chromosome3.calculate();
+        this.chromosome4.calculate();
         
     }
-    public void swap(String[] str1, String[] str2) 
+    public void cross(String[] str1, String[] str2) 
     {
         Random rand = new Random() ;
         int randomNum = rand.nextInt((5 - 0) + 1) + 1;
@@ -124,29 +123,29 @@ public class generation
     {
         return maxOfFunction;
     }
-public pop getPop1() {
-        return pop1;
+public Chromosome getChromosome1() {
+        return chromosome1;
     }
 
     /**
      * @return the pop2
      */
-    public pop getPop2() {
-        return pop2;
+    public Chromosome getChromosome2() {
+        return chromosome2;
     }
 
     /**
      * @return the pop3
      */
-    public pop getPop3() {
-        return pop3;
+    public Chromosome getChromosome3() {
+        return chromosome3;
     }
 
     /**
      * @return the pop4
      */
-    public pop getPop4() {
-        return pop4;
+    public Chromosome getChromosome4() {
+        return chromosome4;
     }
 
     

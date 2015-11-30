@@ -1,15 +1,15 @@
 import java.util.Arrays;
 
-public class pop
+public class Chromosome
 {
 
     private  String[] population = new String [5];
-     private  String intNumber;
+    private  String intNumber;
     private int variable;
     private int function;
     private double offSpringFitness;
     private int offSpringFitnessRpunded;
-    public pop(String[] pop)
+    public Chromosome(String[] pop)
     {
         population = pop;
         
